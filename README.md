@@ -6,14 +6,15 @@ Run it in detached mode and later on execute bash in order to play with it.
 
 ~~~~
 docker run -d --name=leap-control -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
-           -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix --cap-add=SYS_PTRACE \
-           reszelaz/leap-control
-docker exec -it leap bash
+           -e QT_X11_NO_MITSHM=1 -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix \
+           --cap-add=SYS_PTRACE reszelaz/leap-control
+xhost +local:
+docker exec -it leap-control bash
 ~~~~
 
 Some command details:
 * cgroups directory is mounted so the systemd can launch the services e.g. mysql (see [link](http://vpavlin.eu/2015/02/fedora-docker-and-systemd/) for more details)
-* In order to use the host's X server (be able to run GUI) we need to export the DISPLAY environment variable and mount the X11 socket directory (see [link](https://hub.docker.com/r/cpascual/taurus-test/) for more details).
+* In order to use the host's X server (be able to run GUI) we need to grant local access to host's X, export the DISPLAY environment variable and mount the X11 socket directory. Additionally to launch QT apps, we need to export the QT_X11_NO_MITSHM var  (see [link](https://hub.docker.com/r/cpascual/taurus-test/) for more details).
 * SYS_PTRACE capability is added so the init scripts can run the daemon process with user different than root (see [link](https://github.com/docker/docker/issues/6800) for more details)
 
 # How to start the control system?

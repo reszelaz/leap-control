@@ -8,7 +8,7 @@ Run it in detached mode and later on execute bash in order to play with it.
 docker run -d --name=leap-control -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
            -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix --cap-add=SYS_PTRACE \
            reszelaz/leap-control
-docker exec -it leap bash
+docker exec -it leap-control bash
 ~~~~
 
 Some command details:
